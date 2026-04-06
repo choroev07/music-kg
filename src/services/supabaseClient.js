@@ -3,6 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 
+console.log('supabase env', {
+  VITE_SUPABASE_URL: supabaseUrl,
+  VITE_SUPABASE_KEY: supabaseKey,
+  envDir: import.meta.env.MODE,
+})
+
 if (!supabaseUrl || !supabaseKey) {
   console.error(
     'Missing Supabase env. Set VITE_SUPABASE_URL and VITE_SUPABASE_KEY in your Vite env (e.g. src/.env.local).',

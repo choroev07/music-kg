@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function LyricsPlayer({
   lyricsLines,
   intervalMs = 2800,
 }) {
+  const { t } = useTranslation()
   const lines = useMemo(
     () => (Array.isArray(lyricsLines) ? lyricsLines.filter(Boolean) : []),
     [lyricsLines],
@@ -41,7 +43,7 @@ export default function LyricsPlayer({
   if (!lines.length) {
     return (
       <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
-        <p className="text-sm text-zinc-400">No lyrics found for this song.</p>
+        <p className="text-sm text-zinc-400">{t('noLyrics')}</p>
       </div>
     )
   }
@@ -49,8 +51,8 @@ export default function LyricsPlayer({
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-white/90">Lyrics</p>
-        <p className="text-xs text-zinc-400">Karaoke mode</p>
+        <p className="text-sm font-semibold text-white/90">{t('lyrics')}</p>
+        <p className="text-xs text-zinc-400">{t('karaokeMode')}</p>
       </div>
 
       <div className="mt-4 flex min-h-[84px] items-end justify-center">
