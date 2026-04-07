@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@700&display=swap');
+
+:root {
+  --neon-pink: #ff007f;
+  --neon-blue: #00f2ff;
+  --bg-deep: #020205; /* Еще темнее для контраста */
+  --glass-panel: rgba(15, 15, 25, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #020205;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Делаем два светящихся пятна на фоне */
+body::before {
+  content: "";
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(255, 0, 127, 0.15) 0%, transparent 70%);
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  bottom: -10%;
+  right: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, transparent 70%);
+  z-index: -1;
+}
+
+/* Стили заголовков */
+h1, h2, .logo-text {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Кнопки "Стеклянные" (для карточек и меню) */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border) !important;
+  color: #fff !important;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-glass:hover {
+  border-color: var(--neon-blue) !important;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Розовая неоновая кнопка (Play) */
+.btn-pink {
+  background: var(--neon-pink) !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.btn-pink:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px rgba(255, 0, 127, 0.6);
+}
+
+/* Нижний плеер (Control Bar) */
+.bottom-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: rgba(5, 5, 10, 0.85) !important;
+  backdrop-filter: blur(25px) !important;
+  -webkit-backdrop-filter: blur(25px);
+  border-top: 1px solid var(--neon-blue) !important;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Полоска прогресса (Neon Blue) */
+.progress-line {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-line-active {
+  background: var(--neon-blue);
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+.song-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 2px solid #ff007f; /* Розовая полоска слева */
+}
+
+.song-card:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: #00f2ff; /* Синее свечение при наведении */
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+}
+
+/* В твоем MainLayout для кнопок навигации */
+.nav-btn {
+  color: #a1a1aa; /* Светло-серый, чтобы было читаемо */
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.nav-btn:hover {
+  color: #00f2ff; /* Синий неон при наведении */
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
+}

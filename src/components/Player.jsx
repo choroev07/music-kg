@@ -1,7 +1,9 @@
 import { PauseCircle, PlayCircle } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function Player({ src, title }) {
+  const { t } = useTranslation()
   const audioRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [durationSec, setDurationSec] = useState(0)
@@ -21,7 +23,7 @@ export default function Player({ src, title }) {
     const onTime = () => setCurrentSec(audio.currentTime || 0)
     const onPlay = () => setIsPlaying(true)
     const onPause = () => setIsPlaying(false)
-    const onError = () => setErrorMessage('Audio failed to load. Check your `audio_url` column.')
+    const onError = () => setErrorMessage(t('audioFailed'))
 
     audio.addEventListener('loadedmetadata', onLoaded)
     audio.addEventListener('timeupdate', onTime)
@@ -36,7 +38,7 @@ export default function Player({ src, title }) {
       audio.removeEventListener('pause', onPause)
       audio.removeEventListener('error', onError)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -64,7 +66,7 @@ export default function Player({ src, title }) {
         audio.pause()
       }
     } catch {
-      setErrorMessage('Could not start playback. Your browser may be blocking autoplay.')
+      setErrorMessage(t('playbackError'))
     }
   }
 
@@ -86,8 +88,8 @@ export default function Player({ src, title }) {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">{title ?? 'Now playing'}</p>
-          <p className="mt-1 text-xs text-zinc-400">Simple progress + play/pause</p>
+          <p className="truncate text-sm font-semibold">{title ?? t('nowPlaying')}</p>
+          <p className="mt-1 text-xs text-zinc-400">{t('simpleProgress')}</p>
         </div>
 
         <button

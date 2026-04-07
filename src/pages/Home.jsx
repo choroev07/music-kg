@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Music } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useOutletContext } from 'react-router-dom' // Добавили для связи с плеером
 import { fetchSongs } from '../services/supabaseClient'
 import SongCard from '../components/SongCard'
 
 export default function Home() {
+  const { t } = useTranslation()
   const [songs, setSongs] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  
+  // Получаем функцию управления из MainLayout
+  const { setIsPlaying, currentSong } = useOutletContext()
 
   useEffect(() => {
     const load = async () => {
@@ -21,57 +27,63 @@ export default function Home() {
         setLoading(false)
       }
     }
-
     load()
   }, [])
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between gap-3">
+    <div className="animate-in fade-in duration-700">
+      {/* Заголовок в стиле неонового терминала */}
+      <div className="mb-8 flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-extrabold tracking-tight">All Songs</h2>
-          <p className="mt-1 text-sm text-zinc-400">Click a track to open details & lyrics</p>
+          <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white neon-text">
+            {t('allSongs')}
+          </h2>
+          <p className="mt-1 text-xs font-mono text-zinc-500 uppercase tracking-widest">
+            {t('clickTrack')}
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/30 px-4 py-2">
-          <Music size={16} className="text-emerald-300" />
-          <span className="text-sm font-semibold text-zinc-100">
-            {loading ? 'Syncing...' : `${songs.length} tracks`}
+        {/* Счетчик треков с эффектом стекла (как на image_c4a490.png) */}
+        <div className="flex items-center gap-2 rounded-lg border border-[#00f2ff]/20 bg-[#00f2ff]/5 px-4 py-2 backdrop-blur-md">
+          <Music size={16} className="text-[#00f2ff] animate-pulse" />
+          <span className="text-xs font-mono font-bold text-[#00f2ff]">
+            {loading ? 'SYNCING...' : `${songs.length} ${t('tracks').toUpperCase()}`}
           </span>
         </div>
       </div>
 
-      {error ? (
-        <div className="mb-4 rounded-xl border border-amber-700/40 bg-amber-900/20 px-4 py-3 text-sm text-amber-200">
+      {error && (
+        <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-xs font-mono text-red-400">
           {error}
         </div>
-      ) : null}
+      )}
 
-      {loading ? (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 9 }).map((_, i) => (
+      {/* Сетка песен */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {loading ? (
+          Array.from({ length: 9 }).map((_, i) => (
             <div
               key={i}
-              className="animate-pulse rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4"
+              className="animate-pulse rounded-xl border border-white/5 bg-white/5 p-4 h-24"
+            />
+          ))
+        ) : songs.length ? (
+          songs.map((song) => (
+            <div 
+              key={song.id} 
+              className={`transition-all duration-300 transform hover:scale-[1.02] active:scale-95 cursor-pointer ${
+                currentSong?.id === song.id ? 'ring-1 ring-[#00f2ff] shadow-[0_0_20px_rgba(0,242,255,0.1)]' : ''
+              }`}
             >
-              <div className="h-11 w-11 rounded-xl bg-white/5" />
-              <div className="mt-3 h-4 w-3/4 rounded bg-white/5" />
-              <div className="mt-2 h-3 w-1/2 rounded bg-white/5" />
+              <SongCard song={song} />
             </div>
-          ))}
-        </div>
-      ) : songs.length ? (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {songs.map((song) => (
-            <SongCard key={song.id} song={song} />
-          ))}
-        </div>
-      ) : (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5 text-sm text-zinc-400">
-          No songs found in your Supabase table. Check `VITE_SONGS_TABLE` / schema columns.
-        </div>
-      )}
+          ))
+        ) : (
+          <div className="col-span-full rounded-xl border border-white/5 bg-white/5 p-10 text-center font-mono text-zinc-500 uppercase tracking-widest">
+            {t('noSongsFound')}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
-
